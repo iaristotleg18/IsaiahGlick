@@ -5,7 +5,7 @@
   var h1 = document.querySelector(".home h1");
   if (!h1) return;
   if (window.matchMedia("(prefers-reduced-motion:reduce)").matches) return;
-  if (!window.matchMedia("(hover:hover)").matches) return;
+  var touch = !window.matchMedia("(hover:hover)").matches;
 
   h1.setAttribute("aria-label", "Isaiah Glick");
   var html = h1.innerHTML;
@@ -43,5 +43,7 @@
       setTimeout(tick, 35 + rnd(30));
     })();
   }
-  h1.addEventListener("pointerenter", run);
+  h1.addEventListener("pointerenter", function (e) { if (e.pointerType !== "touch") run(); });
+  h1.addEventListener("pointerdown", run);          // tap on phones
+  if (touch) setTimeout(run, 700);                   // phones have no hover: play it once on load
 })();

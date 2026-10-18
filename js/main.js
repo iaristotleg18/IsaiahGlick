@@ -9,7 +9,7 @@
     if (k === "resume") { el.href = S.resume; el.setAttribute("download", "Isaiah-Glick-Resume.pdf"); }
     if (k === "linkedin") el.href = S.linkedin;
     if (k === "instagram") el.href = igUrl;
-    if (k === "instagram-text") { el.href = igUrl; el.textContent = "@" + S.instagram + " ↗"; }
+    if (k === "instagram-text") { el.href = igUrl; el.textContent = "@" + S.instagram + " ↗\uFE0E"; }
     if (k === "maroon") el.href = S.maroon;
     if (k === "drive") el.href = S.driveFolder;
     if (k === "mailto") el.href = mailBase + "?subject=Portfolio%20access%20request&body=Hi%20Isaiah%2C%20please%20share%20the%20portfolio%20with%20this%20Google%20account%3A%20";
@@ -70,5 +70,30 @@
       [pf, pop].forEach(function (el) { el.addEventListener("mouseenter", show); el.addEventListener("mouseleave", hide); });
       pf.addEventListener("focus", show); pf.addEventListener("blur", hide);
     }
+  }
+
+  // Phrase highlight on touch screens: plays when it scrolls into view, and again on tap
+  var em = document.querySelector(".statement em");
+  if (em && window.matchMedia("(hover:none)").matches) {
+    var off;
+    function flash() { em.classList.remove("on"); void em.offsetWidth; em.classList.add("on"); clearTimeout(off); off = setTimeout(function () { em.classList.remove("on"); }, 1600); }
+    em.addEventListener("click", flash);
+    if ("IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { setTimeout(flash, 1000); io.disconnect(); } }, { threshold: 1 });
+      io.observe(em);
+    } else { setTimeout(flash, 1000); }
+  }
+
+  // Email and phone slip up and out of the way once you scroll, so the name never runs under them
+  var top = document.querySelector(".top");
+  if (top) {
+    var tucked = false;
+    function check(y) {
+      var t = y > 24;
+      if (t !== tucked) { tucked = t; top.classList.toggle("tucked", t); }
+    }
+    window.addEventListener("scroll", function () { check(window.scrollY || document.documentElement.scrollTop); }, { passive: true });
+    document.addEventListener("scroll", function (e) { if (e.target && e.target.classList && e.target.classList.contains("view")) check(e.target.scrollTop); }, { passive: true, capture: true });
+    window.addEventListener("hashchange", function () { check(0); });
   }
 })();
