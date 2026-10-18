@@ -46,7 +46,7 @@ ul,ol{list-style:none}
 .home-row{display:grid;grid-template-columns:1fr auto;gap:var(--pad);align-items:end;margin-top:clamp(14px,2.6vh,30px)}
 .statement{font-size:clamp(16px,1.5vw,21px);line-height:1.38;letter-spacing:-.01em;max-width:32em}
 .statement em{font-style:normal;font-weight:600}
-.meta{margin-top:12px;color:var(--mut);font-size:14px}
+.meta{margin-top:12px;color:var(--mut);font-size:14px;max-width:46em}
 .note{margin-top:5px;color:var(--mut);font-size:13px}
 .textlink{white-space:nowrap;color:var(--text);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
 .textlink:hover{color:var(--blue)}
@@ -68,6 +68,22 @@ ul,ol{list-style:none}
 .work-tile{background:var(--blue);border-color:var(--blue)}
 .work-tile:hover,.work-tile.press{background:#3a7bd5;border-color:#3a7bd5;color:#fff}
 
+.menu{position:relative}
+.pop{position:absolute;left:0;bottom:calc(100% + 12px);width:min(310px,86vw);background:var(--bg);border:1.5px solid #fff;padding:14px 16px 14px;z-index:20;opacity:0;transform:translateY(6px);transition:opacity .18s,transform .22s cubic-bezier(.2,.8,.2,1)}
+.pop[hidden]{display:none}
+.pop.show{opacity:1;transform:none}
+.pop-t{font-weight:700;font-size:15px;letter-spacing:-.01em}
+.pop-b{margin-top:4px;font-size:13.5px;line-height:1.4;color:var(--mut)}
+.pop-b a{color:#fff}
+.pop-a{margin-top:12px;display:none;gap:16px;align-items:center;font-size:13.5px}
+.pop-b a,.pop-a a,.pop-x{font:inherit;font-weight:600;color:#fff;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;background:none;border:0;padding:0;cursor:pointer}
+.pop-b a:hover,.pop-a a:hover,.pop-x:hover{color:var(--blue)}
+.pop-go,.pop-x{display:none}
+@media (hover:none){
+  .pop{position:fixed;left:16px;right:16px;bottom:16px;width:auto;box-shadow:0 0 0 100vmax rgba(0,0,0,.55)}
+  .pop-a{display:flex}
+  .pop-go,.pop-x{display:inline}
+}
 .hint{position:fixed;bottom:18px;right:max(var(--pad),calc((100vw - var(--max))/2 + var(--pad)));font-size:13px;color:var(--mut);text-align:right}
 kbd{font:inherit;font-weight:700;font-size:11px;color:var(--text);border:1px solid rgba(255,255,255,.5);padding:1px 6px;margin:0 1px}
 @media (hover:none){.hint{display:none}}
