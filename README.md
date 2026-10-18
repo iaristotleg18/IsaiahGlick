@@ -1,7 +1,5 @@
 # Isaiah Glick — personal site
 
-A static site (HTML, CSS, JavaScript). No build step. Works on GitHub Pages as-is.
-
 ## Hidden features (shortcuts and hover)
 Pressing P, R, L, I or M opens Portfolio, Resume, LinkedIn, Instagram or Maroon. Esc closes the resume. The letters are shown in each tile's corner.
 
