@@ -4,8 +4,9 @@
 (function () {
   var h1 = document.querySelector(".home h1");
   if (!h1) return;
-  if (window.matchMedia("(prefers-reduced-motion:reduce)").matches) return;
+  var reduced = window.matchMedia("(prefers-reduced-motion:reduce)").matches;
   var touch = !window.matchMedia("(hover:hover)").matches;
+  if (reduced && !touch) return;
 
   h1.setAttribute("aria-label", "Isaiah Glick");
   var html = h1.innerHTML;
@@ -24,26 +25,34 @@
 
   function rnd(n) { return Math.random() * n; }
   function band() { // a random horizontal slice, as inset() values
-    var top = rnd(80), h = 6 + rnd(22);
+    var top = rnd(75), h = 8 + rnd(touch ? 30 : 22);
     return "inset(" + top + "% 0 " + Math.max(0, 100 - top - h) + "% 0)";
   }
   function run() {
     if (busy) return; busy = true;
-    var size = parseFloat(getComputedStyle(h1).fontSize), n = 0, total = 11;
+    var size = parseFloat(getComputedStyle(h1).fontSize), n = 0, total = touch ? (reduced ? 10 : 18) : 11, amp = touch ? (reduced ? 1 : 1.6) : 1;
     h1.classList.add("glitch");
     (function tick() {
       if (n++ >= total) {
-        [a, b].forEach(function (l) { l.style.clipPath = "inset(0 0 100% 0)"; l.style.transform = ""; });
+        [a, b].forEach(function (l) { l.style.clipPath = l.style.webkitClipPath = "inset(0 0 100% 0)"; l.style.transform = ""; });
         main.style.transform = ""; h1.classList.remove("glitch"); busy = false; return;
       }
       var k = 1 - n / total; // fades out as it settles
-      a.style.clipPath = band(); a.style.transform = "translateX(" + ((rnd(2) - 1) * size * .09 * k - size * .02) + "px)";
-      b.style.clipPath = band(); b.style.transform = "translateX(" + ((rnd(2) - 1) * size * .09 * k + size * .02) + "px)";
-      main.style.transform = Math.random() < .35 ? "translateX(" + ((rnd(2) - 1) * size * .03 * k) + "px)" : "";
+      a.style.clipPath = a.style.webkitClipPath = band(); a.style.transform = "translateX(" + ((rnd(2) - 1) * size * .09 * amp * k - size * .02 * amp) + "px)";
+      b.style.clipPath = b.style.webkitClipPath = band(); b.style.transform = "translateX(" + ((rnd(2) - 1) * size * .09 * amp * k + size * .02 * amp) + "px)";
+      main.style.transform = Math.random() < .35 ? "translateX(" + ((rnd(2) - 1) * size * .03 * amp * k) + "px)" : "";
       setTimeout(tick, 35 + rnd(30));
     })();
   }
   h1.addEventListener("pointerenter", function (e) { if (e.pointerType !== "touch") run(); });
   h1.addEventListener("pointerdown", run);          // tap on phones
-  if (touch) setTimeout(run, 700);                   // phones have no hover: play it once on load
+  if (touch) {                                       // phones have no hover: play on load, and again whenever the name scrolls back into view
+    setTimeout(run, 500);
+    if ("IntersectionObserver" in window) {
+      var seen = true;
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting && !seen) run(); seen = e.isIntersecting; });
+      }, { threshold: .6 }).observe(h1);
+    }
+  }
 })();

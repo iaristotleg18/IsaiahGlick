@@ -10,8 +10,8 @@ window.SITE = {
   // Your Chicago Maroon staff page.
   maroon: "https://chicagomaroon.com/staff_name/isaiah-glick/",
   linkedin: "https://www.linkedin.com/in/isaiah-glick/",
-  // Your Instagram username, no @ sign.
-  instagram: "loosecanontalk",
+  // Your Instagram profile link.
+  instagram: "https://www.instagram.com/loosecanontalk/",
   // Your Google Drive portfolio folder. In Drive, set its sharing to "Restricted"
   // and add the email addresses you want to grant access to.
   driveFolder: "https://drive.google.com/drive/folders/1igO4f1G8P6NxMnjsJwd0sKI9x6OKcwzy",

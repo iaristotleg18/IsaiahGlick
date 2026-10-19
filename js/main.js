@@ -1,6 +1,6 @@
 (function () {
   var S = window.SITE || {};
-  var igUrl = "https://www.instagram.com/" + (S.instagram || "") + "/";
+  var igUrl = /^https?:/.test(S.instagram || "") ? S.instagram : "https://www.instagram.com/" + String(S.instagram || "").replace(/^@/, "").replace(/\/+$/, "") + "/";
   var mailBase = "mailto:" + S.email;
 
   // Fill links from config
@@ -9,7 +9,7 @@
     if (k === "resume") { el.href = S.resume; el.setAttribute("download", "Isaiah-Glick-Resume.pdf"); }
     if (k === "linkedin") el.href = S.linkedin;
     if (k === "instagram") el.href = igUrl;
-    if (k === "instagram-text") { el.href = igUrl; el.textContent = "@" + S.instagram + " ↗\uFE0E"; }
+    if (k === "instagram-text") { el.href = igUrl; el.textContent = "@" + igUrl.replace(/\/+$/, "").split("/").pop() + " ↗\uFE0E"; }
     if (k === "maroon") el.href = S.maroon;
     if (k === "drive") el.href = S.driveFolder;
     if (k === "mailto") el.href = mailBase + "?subject=Portfolio%20access%20request&body=Hi%20Isaiah%2C%20please%20share%20the%20portfolio%20with%20this%20Google%20account%3A%20";
@@ -95,5 +95,26 @@
     window.addEventListener("scroll", function () { check(window.scrollY || document.documentElement.scrollTop); }, { passive: true });
     document.addEventListener("scroll", function (e) { if (e.target && e.target.classList && e.target.classList.contains("view")) check(e.target.scrollTop); }, { passive: true, capture: true });
     window.addEventListener("hashchange", function () { check(0); });
+  }
+
+  // Light / dark toggle
+  var tb = document.querySelector(".theme"), root = document.documentElement;
+  var meta = document.querySelector('meta[name="theme-color"]');
+  function paint() {
+    var light = root.getAttribute("data-theme") === "light";
+    tb.setAttribute("aria-label", light ? "Switch to dark theme" : "Switch to light theme");
+    if (meta) meta.setAttribute("content", light ? "#f1f2f4" : "#2b2c33");
+  }
+  if (tb) {
+    paint();
+    tb.addEventListener("click", function () {
+      var light = root.getAttribute("data-theme") === "light";
+      root.classList.add("theme-anim");
+      if (light) root.removeAttribute("data-theme"); else root.setAttribute("data-theme", "light");
+      try { localStorage.setItem("theme", light ? "dark" : "light"); } catch (e) {}
+      tb.classList.add("spin"); setTimeout(function () { tb.classList.remove("spin"); }, 450);
+      paint();
+      setTimeout(function () { root.classList.remove("theme-anim"); }, 450);
+    });
   }
 })();
